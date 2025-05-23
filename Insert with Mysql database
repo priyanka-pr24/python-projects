@@ -1,0 +1,26 @@
+from flask import Flask , render_template , request
+import mysql.connector
+myconn=mysql.connector.connect(host="localhost",
+                              user="root",
+                              password="",
+                              database="hello")
+
+mycursor=myconn.cursor()
+app=Flask(__name__)
+app.secret_key="pri123"
+
+@app.route(‘/’,methods=[‘POST’,’GET’])
+def home():
+	if request.method=="POST":
+		Name=request.form.get('name')
+		Email=request.form.get('email')
+		Password=request.form.get('password')
+		Message=request.form.get('message')
+
+		mycursor.execute("INSERT INTO `pri_tbl`(`name`, `email`, `password`, `message`) VALUES (%s,%s,%s,%s)",(name,email,password,message))
+		myconn.commit()
+		return "succesfull"		
+
+	return render_template("home.html")
+
+app.run(debug=True)	
